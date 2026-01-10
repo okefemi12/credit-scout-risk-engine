@@ -1,0 +1,8 @@
+streamlit
+tensorflow-cpu
+shap
+numpy
+pandas
+groq
+matplotlib
+scikit-learn

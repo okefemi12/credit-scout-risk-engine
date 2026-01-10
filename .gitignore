@@ -1,0 +1,12 @@
+# Python junk
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Mac junk
+.DS_Store
+
+# Sensitive Keys 
+secrets.toml
+
