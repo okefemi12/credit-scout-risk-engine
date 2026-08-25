@@ -1,8 +1,11 @@
-streamlit
+fastapi
+uvicorn
+pydantic
+sqlalchemy
+psycopg2-binary
 tensorflow-cpu
 shap
 numpy
 pandas
 groq
-matplotlib
 scikit-learn
