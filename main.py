@@ -9,10 +9,15 @@ from fastapi.responses import FileResponse
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Load ML artifacts into memory on startup
-    ml_service.load_ml_resources()
-    # Create database tables
-    models.Base.metadata.create_all(bind=database.engine)
+    try:
+        print("Starting up: Loading ML resources...")
+        ml_service.load_ml_resources()
+        print("Starting up: Creating database tables...")
+        models.Base.metadata.create_all(bind=database.engine)
+        print("Startup complete successfully!")
+    except Exception as e:
+        print(f"CRITICAL STARTUP ERROR: {str(e)}")
+        raise e
     yield
 
 app = FastAPI(title="Credit-Scout Risk API", lifespan=lifespan)
