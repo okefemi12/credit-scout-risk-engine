@@ -5,6 +5,7 @@ import database, models, schemas, ml_service
 from contextlib import asynccontextmanager
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from fastapi.responses import JSONResponse
 
 
 @asynccontextmanager
@@ -30,7 +31,16 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def serve_dashboard():
     file_path = "static/index.html"
     if not os.path.exists(file_path):
-        return {"error": f"Dashboard file not found at path: {os.path.abspath(file_path)}"}
+        # List what files actually exist in the container to debug
+        current_dir_contents = os.listdir(".")
+        return JSONResponse(
+            status_code=404,
+            content={
+                "error": "index.html not found",
+                "looking_at_path": os.path.abspath(file_path),
+                "root_directory_contents": current_dir_contents
+            }
+        )
     return FileResponse(file_path)
 
 @app.post("/analyze-risk", response_model=schemas.TransactionResponse)
