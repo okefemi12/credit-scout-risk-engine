@@ -32,6 +32,6 @@ jobs:
       - name: Deploy to Azure Container App
         uses: azure/container-apps-deploy-action@v1
         with:
-          image: creditscoutregistry39.azurecr.io/credit-scout-api:${{ github.sha }}
+          imageToDeploy: creditscoutregistry39.azurecr.io/credit-scout-api:${{ github.sha }}
           container-app-name: credit-scout-app
           resource-group: credit-scout-rg
