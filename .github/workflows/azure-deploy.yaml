@@ -33,5 +33,6 @@ jobs:
         uses: azure/container-apps-deploy-action@v1
         with:
           imageToDeploy: creditscoutregistry39.azurecr.io/credit-scout-api:${{ github.sha }}
-          container-app-name: credit-scout-app
-          resource-group: credit-scout-rg
+          containerAppName: credit-scout-app
+          resourceGroup: credit-scout-rg
+          location: southafricanorth
