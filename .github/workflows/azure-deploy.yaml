@@ -36,3 +36,6 @@ jobs:
           containerAppName: credit-scout-app
           resourceGroup: credit-scout-rg
           location: southafricanorth
+          registryUrl: creditscoutregistry39.azurecr.io
+          registryUsername: ${{ secrets.REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
