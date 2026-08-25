@@ -11,7 +11,7 @@ from fastapi.responses import FileResponse
 async def lifespan(app: FastAPI):
     try:
         print("Starting up: Skipping ML load for debug...")
-        # ml_service.load_ml_resources()  <-- Temporarily commented out
+        ml_service.load_ml_resources()  
         print("Starting up: Creating database tables...")
         models.Base.metadata.create_all(bind=database.engine)
         print("Startup complete successfully!")
@@ -28,7 +28,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Serve the dashboard on the root URL
 @app.get("/")
 def serve_dashboard():
-    return FileResponse("static/index.html")  
+    file_path = "static/index.html"
+    if not os.path.exists(file_path):
+        return {"error": f"Dashboard file not found at path: {os.path.abspath(file_path)}"}
+    return FileResponse(file_path)
 
 @app.post("/analyze-risk", response_model=schemas.TransactionResponse)
 def analyze_risk(req: schemas.TransactionRequest, db: Session = Depends(database.get_db)):
