@@ -18,7 +18,7 @@ jobs:
       - name: Log in to Azure Container Registry (ACR)
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          login-server: creditscoutregistry39.azurecr.io
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
@@ -27,11 +27,11 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/credit-scout-api:${{ github.sha }}
+          tags: creditscoutregistry39.azurecr.io/credit-scout-api:${{ github.sha }}
 
       - name: Deploy to Azure Container App
         uses: azure/container-apps-deploy-action@v1
         with:
-          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/credit-scout-api:${{ github.sha }}
+          image: creditscoutregistry39.azurecr.io/credit-scout-api:${{ github.sha }}
           container-app-name: credit-scout-app
           resource-group: credit-scout-rg
