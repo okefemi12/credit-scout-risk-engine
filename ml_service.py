@@ -118,7 +118,7 @@ Write a "Notice of Adverse Action" explanation. Use the provided logic hints. In
             model="openai/gpt-oss-20b",  # Standard model, no <think> tags
             messages=[{"role": "user", "content": prompt}], 
             temperature=0.1, 
-            max_tokens=300
+            max_tokens=800
         )
         return completion.choices[0].message.content or "No response returned from model."
     except Exception as e:
