@@ -46,17 +46,18 @@ pip install -r requirements.txt
 ```
 
 
-3. **Set up API Keys**
+3. **Set up Environment Variables**
 Create a `.env` file or export your Groq key:
 ```bash
 export GROQ_API_KEY="gsk_..."
+export DATABASE_URL="postgresql://user:password@localhost:5432/db_name"
 
 ```
 
 
-4. **Run the App**
+4. **Run the Application Locally**
 ```bash
-streamlit run app.py
+uvicorn main:app --reload --port 8000
 
 ```
 
