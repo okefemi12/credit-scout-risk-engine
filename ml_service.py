@@ -1,5 +1,5 @@
 import os 
-import numpy 
+import numpy as np
 import tensorflow as tf 
 import shap 
 import pickle 
@@ -7,7 +7,8 @@ from groq import Groq
 
 # Initialize global resources
 model, scaler, columns, explainer = None, None , None ,None
-client = Groq(api_key = os.environ.get("GROQ_API_KEY"))
+groq_api_key = os.environ.get("GROQ_API_KEY")
+client = Groq(api_key=groq_api_key) if groq_api_key else None
 
 BUSSINESS_MAP = {
     'step': 'Transaction Hour', 'type_enc': 'Txn Type (Transfer/CashOut)',
