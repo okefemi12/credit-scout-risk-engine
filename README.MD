@@ -8,7 +8,7 @@
 
 **Live Demo:** [Click Here to Launch App](https://huggingface.co/spaces/oke39/Credit-Scout-Live)  
 **Experiment Tracking:** [View Training Metrics on DagsHub](https://dagshub.com/oke03940/Credit-Scout-Fraud-Detection/experiments)
-
+<img width="1895" height="907" alt="Image" src="https://github.com/user-attachments/assets/ed767f7e-05ad-438b-ae14-2a085e7ff93b" />
 ##  Overview
 Credit-Scout is a real-time financial fraud detection system that bridges the gap between **Black-Box AI** and **Regulatory Compliance**. 
 
