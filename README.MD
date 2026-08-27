@@ -37,7 +37,7 @@ It combines an **LSTM neural network** for real-time transaction scoring, **SHAP
    ```bash
    git clone [https://github.com/oke39/credit-scout-risk-engine.git](https://github.com/oke39/credit-scout-risk-engine.git)
    cd credit-scout-risk-engine
-  ```
+
 
 2. **Install dependencies**
 ```bash
