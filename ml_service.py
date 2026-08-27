@@ -115,17 +115,12 @@ Write a "Notice of Adverse Action" explanation. Use the provided logic hints. In
 
     try:
         completion = client.chat.completions.create(
-            model="qwen/qwen3.6-27b",
+            model="openai/gpt-oss-20b",  # Standard model, no <think> tags
             messages=[{"role": "user", "content": prompt}], 
             temperature=0.1, 
-            max_tokens=1000
+            max_tokens=300
         )
-        content = completion.choices[0].message.content or ""
-        
-        # Remove any <think>...</think> block emitted by reasoning models
-        cleaned_content = re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL).strip()
-        
-        return cleaned_content if cleaned_content else content
+        return completion.choices[0].message.content or "No response returned from model."
     except Exception as e:
         return f"LLM Error: {str(e)}"
     
