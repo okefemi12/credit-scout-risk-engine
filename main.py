@@ -12,13 +12,14 @@ import os
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        print("Starting up: Skipping ML load for debug...")
+        print("Starting up: Loading ML resources...")
         ml_service.load_ml_resources()  
         print("Starting up: Creating database tables...")
         models.Base.metadata.create_all(bind=database.engine)
         print("Startup complete successfully!")
     except Exception as e:
         print(f"CRITICAL STARTUP ERROR: {str(e)}")
+        raise e  # This ensures the container fails visibly if models are missing
     yield
 
 app = FastAPI(title="Credit-Scout Risk API", lifespan=lifespan)
