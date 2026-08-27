@@ -20,7 +20,10 @@ BUSSINESS_MAP = {
 
 
 def load_ml_resources():
-    global model,scaler,columns,explainer
+    global model, scaler, columns, explainer
+    print("CURRENT WORKING DIRECTORY:", os.getcwd())
+    print("FILES IN DIRECTORY:", os.listdir("."))
+    
     model = tf.keras.models.load_model('latest_checkpoint.h5')
     with open('scaler.pkl', 'rb') as f: scaler = pickle.load(f)
     with open('columns.pkl', 'rb') as f: columns = pickle.load(f)

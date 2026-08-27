@@ -1,121 +1,640 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credit-Scout | AI Risk Engine</title>
-    <style>
-        :root { --primary: #0f172a; --accent: #3b82f6; --bg: #f8fafc; --card: #ffffff; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--primary); margin: 0; padding: 2rem; display: flex; justify-content: center; }
-        .container { max-width: 1000px; width: 100%; display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
-        .card { background: var(--card); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-        h1, h2 { margin-top: 0; }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem; }
-        input, select { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; background-color: var(--accent); color: white; border: none; padding: 1rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        button:hover { background-color: #2563eb; }
-        .result-box { display: none; margin-top: 1.5rem; padding: 1.5rem; border-radius: 8px; border-left: 5px solid; }
-        .flagged { background-color: #fef2f2; border-color: #ef4444; }
-        .approved { background-color: #f0fdf4; border-color: #22c55e; }
-        .metric { font-size: 2rem; font-weight: bold; margin: 0.5rem 0; }
-        #explanation { white-space: pre-wrap; font-size: 0.95rem; line-height: 1.6; color: #334155; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Credit-Scout | AI Risk Engine</title>
+<meta name="theme-color" content="#060607">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060607;
+    --surface:#121214;
+    --surface-raised:#19191c;
+    --border:#2a2a2e;
+    --border-strong:#3a3a3f;
+    --red:#e21f36;
+    --red-dim:#4d0f18;
+    --red-soft:rgba(226,31,54,.12);
+    --green:#2fbf6e;
+    --green-soft:rgba(47,191,110,.12);
+    --white:#f2f2f0;
+    --muted:#9a9aa0;
+    --muted-2:#6c6c72;
+    --radius:14px;
+    --radius-sm:9px;
+    --font-display:'Space Grotesk',sans-serif;
+    --font-body:'Inter',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--white);
+    font-family:var(--font-body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+  }
+
+  ::selection{background:var(--red);color:var(--white);}
+
+  a{color:inherit;}
+
+  button{font-family:inherit;}
+
+  /* ---------- Header ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px clamp(16px,4vw,40px);
+    background:rgba(6,6,7,.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-mark{
+    width:38px;height:38px;flex-shrink:0;
+    display:grid;place-items:center;
+    border-radius:10px;
+    background:linear-gradient(160deg,var(--red-dim),#0d0d0e 70%);
+    border:1px solid var(--border-strong);
+  }
+  .brand-mark svg{width:20px;height:20px;}
+  /* To use a custom logo image instead of the built-in mark, add logo.png
+     next to this file and swap the .brand-mark block for:
+     <div class="brand-mark"><img src="logo.png" alt="Credit-Scout logo" style="width:100%;height:100%;object-fit:contain;border-radius:10px;"></div> */
+  .brand-text{display:flex;flex-direction:column;line-height:1.15;}
+  .brand-name{
+    font-family:var(--font-display);font-weight:700;
+    font-size:16px;letter-spacing:.02em;
+  }
+  .brand-name span{color:var(--red);}
+  .brand-sub{
+    font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;
+    color:var(--muted-2);text-transform:uppercase;
+  }
+  .status-pill{
+    display:flex;align-items:center;gap:7px;
+    padding:7px 12px;border:1px solid var(--border);border-radius:999px;
+    font-family:var(--font-mono);font-size:11px;color:var(--muted);
+    white-space:nowrap;
+  }
+  .status-dot{
+    width:7px;height:7px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 0 0 rgba(47,191,110,.6);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(47,191,110,.45);}
+    70%{box-shadow:0 0 0 6px rgba(47,191,110,0);}
+    100%{box-shadow:0 0 0 0 rgba(47,191,110,0);}
+  }
+
+  /* ---------- Layout ---------- */
+  .page{
+    max-width:1180px;margin:0 auto;
+    padding:clamp(20px,4vw,44px) clamp(16px,4vw,40px) 60px;
+  }
+  .page-head{margin-bottom:26px;}
+  .eyebrow{
+    font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;
+    color:var(--red);text-transform:uppercase;margin:0 0 8px;
+  }
+  h1{
+    font-family:var(--font-display);font-weight:700;
+    font-size:clamp(22px,3.4vw,32px);margin:0 0 8px;letter-spacing:-.01em;
+  }
+  .page-desc{color:var(--muted);margin:0;font-size:14.5px;max-width:56ch;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:minmax(280px,380px) 1fr;
+    gap:22px;
+    align-items:start;
+  }
+  @media (max-width:860px){
+    .grid{grid-template-columns:1fr;}
+  }
+
+  .panel{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:clamp(18px,3vw,26px);
+  }
+  .panel-title{
+    font-family:var(--font-display);font-weight:600;font-size:15px;
+    margin:0 0 4px;display:flex;align-items:center;gap:8px;
+  }
+  .panel-title svg{width:16px;height:16px;color:var(--red);flex-shrink:0;}
+  .panel-hint{color:var(--muted-2);font-size:12.5px;margin:0 0 20px;}
+
+  /* ---------- Form ---------- */
+  .segmented{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:8px;margin-bottom:18px;
+  }
+  .segmented input{position:absolute;opacity:0;pointer-events:none;}
+  .segmented label{
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    padding:11px 8px;border-radius:var(--radius-sm);
+    border:1px solid var(--border);background:var(--surface-raised);
+    font-size:13px;font-weight:500;color:var(--muted);
+    cursor:pointer;transition:.15s ease;user-select:none;
+  }
+  .segmented label svg{width:14px;height:14px;}
+  .segmented input:checked + label{
+    background:var(--red-soft);border-color:var(--red);color:var(--white);
+  }
+  .segmented input:focus-visible + label{outline:2px solid var(--red);outline-offset:2px;}
+
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block;font-size:12px;font-weight:500;color:var(--muted);
+    margin-bottom:7px;
+  }
+  .field-input{position:relative;}
+  .field-input .prefix{
+    position:absolute;left:13px;top:50%;transform:translateY(-50%);
+    color:var(--muted-2);font-family:var(--font-mono);font-size:13.5px;
+    pointer-events:none;
+  }
+  .field input[type="number"]{
+    width:100%;padding:11px 13px 11px 27px;
+    background:var(--surface-raised);
+    border:1px solid var(--border);border-radius:var(--radius-sm);
+    color:var(--white);font-family:var(--font-mono);font-size:13.5px;
+    transition:.15s border-color ease, .15s box-shadow ease;
+  }
+  .field input:hover{border-color:var(--border-strong);}
+  .field input:focus{
+    outline:none;border-color:var(--red);
+    box-shadow:0 0 0 3px var(--red-soft);
+  }
+  .field input::-webkit-outer-spin-button,
+  .field input::-webkit-inner-spin-button{opacity:.5;}
+
+  .submit-btn{
+    width:100%;padding:14px;margin-top:6px;
+    background:var(--red);color:var(--white);border:none;
+    border-radius:var(--radius-sm);font-family:var(--font-display);
+    font-weight:600;font-size:14px;letter-spacing:.01em;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    transition:.15s background ease, .15s transform ease;
+  }
+  .submit-btn:hover{background:#c81a2e;}
+  .submit-btn:active{transform:scale(.99);}
+  .submit-btn:disabled{background:#3a2226;color:var(--muted-2);cursor:not-allowed;}
+  .submit-btn .spinner{
+    width:15px;height:15px;border-radius:50%;
+    border:2px solid rgba(255,255,255,.25);border-top-color:#fff;
+    animation:spin .7s linear infinite;display:none;
+  }
+  .submit-btn.is-loading .spinner{display:inline-block;}
+  .submit-btn.is-loading .btn-label::after{content:"Analyzing\2026";}
+  .submit-btn.is-loading .btn-label{font-size:0;}
+  .submit-btn.is-loading .btn-label::after{font-size:14px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ---------- Steps ---------- */
+  .steps{
+    display:flex;align-items:center;gap:6px;margin-bottom:22px;
+  }
+  .step{
+    flex:1;height:3px;border-radius:3px;background:var(--border);
+    transition:.3s background ease;
+  }
+  .step.is-active{background:var(--red);}
+  .step.is-done{background:var(--green);}
+  .steps-labels{
+    display:flex;justify-content:space-between;
+    font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;
+    color:var(--muted-2);text-transform:uppercase;margin:-16px 0 22px;
+  }
+
+  /* ---------- Result states ---------- */
+  .result-panel{min-height:480px;display:flex;flex-direction:column;}
+
+  .state{display:none;flex:1;flex-direction:column;}
+  .state.is-visible{display:flex;}
+
+  .empty-state{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;text-align:center;gap:14px;
+    border:1px dashed var(--border-strong);border-radius:var(--radius-sm);
+    padding:40px 20px;color:var(--muted-2);
+  }
+  .empty-state svg{width:34px;height:34px;color:var(--border-strong);}
+  .empty-state p{margin:0;font-size:13px;max-width:32ch;}
+  .empty-state .accent{color:var(--muted);font-weight:500;}
+
+  .loading-state{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:22px;padding:40px 20px;
+  }
+  .scan-box{
+    width:100%;max-width:260px;height:6px;border-radius:6px;
+    background:var(--surface-raised);border:1px solid var(--border);
+    overflow:hidden;position:relative;
+  }
+  .scan-box::after{
+    content:"";position:absolute;top:0;bottom:0;left:-40%;width:40%;
+    background:linear-gradient(90deg,transparent,var(--red),transparent);
+    animation:scan 1.1s ease-in-out infinite;
+  }
+  @keyframes scan{
+    0%{left:-40%;} 100%{left:100%;}
+  }
+  .loading-text{
+    font-family:var(--font-mono);font-size:12px;color:var(--muted);
+    letter-spacing:.02em;
+  }
+
+  /* ---------- Verdict + gauge ---------- */
+  .verdict-row{
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:12px;margin-bottom:18px;
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:8px 14px;border-radius:999px;font-weight:600;font-size:13px;
+    font-family:var(--font-display);
+  }
+  .badge svg{width:15px;height:15px;}
+  .badge.flagged{background:var(--red-soft);color:#ff5568;border:1px solid rgba(226,31,54,.4);}
+  .badge.approved{background:var(--green-soft);color:#4fdb8f;border:1px solid rgba(47,191,110,.4);}
+  .ref-id{
+    font-family:var(--font-mono);font-size:11.5px;color:var(--muted-2);
+    text-align:right;
+  }
+
+  .gauge-wrap{
+    display:flex;flex-direction:column;align-items:center;
+    padding:6px 0 4px;
+  }
+  .gauge{width:min(260px,80%);}
+  .gauge-value{
+    font-family:var(--font-mono);font-weight:600;
+    font-size:clamp(30px,6vw,42px);margin-top:-38px;
+  }
+  .gauge-label{
+    font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;
+    color:var(--muted-2);text-transform:uppercase;margin-top:2px;
+  }
+  .needle{
+    transform-origin:130px 130px;
+    transition:transform 1s cubic-bezier(.2,.8,.2,1);
+  }
+
+  .stat-row{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:10px;margin:22px 0;
+  }
+  .stat-card{
+    background:var(--surface-raised);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:12px 14px;
+  }
+  .stat-label{
+    font-size:10.5px;color:var(--muted-2);text-transform:uppercase;
+    letter-spacing:.08em;margin-bottom:6px;
+  }
+  .stat-value{
+    font-family:var(--font-mono);font-size:14px;font-weight:600;
+    word-break:break-word;
+  }
+  .stat-value.is-flag{color:var(--red);}
+
+  .report-box{
+    border-top:1px solid var(--border);padding-top:18px;margin-top:4px;
+  }
+  .report-head{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:10px;flex-wrap:wrap;gap:8px;
+  }
+  .report-title{
+    display:flex;align-items:center;gap:8px;font-family:var(--font-display);
+    font-weight:600;font-size:14px;
+  }
+  .report-title svg{width:15px;height:15px;color:var(--red);}
+  .model-tag{
+    font-family:var(--font-mono);font-size:10.5px;color:var(--muted-2);
+    border:1px solid var(--border);padding:3px 8px;border-radius:999px;
+  }
+  .report-text{
+    background:var(--surface-raised);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:16px;
+    font-family:var(--font-mono);font-size:12.5px;line-height:1.7;
+    color:#d7d7d9;white-space:pre-wrap;
+  }
+
+  .error-state{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;text-align:center;gap:12px;padding:40px 20px;
+  }
+  .error-state svg{width:30px;height:30px;color:var(--red);}
+  .error-state p{margin:0;color:var(--muted);font-size:13px;max-width:34ch;}
+  .retry-btn{
+    background:transparent;border:1px solid var(--border-strong);
+    color:var(--white);padding:9px 16px;border-radius:var(--radius-sm);
+    font-size:12.5px;cursor:pointer;
+  }
+  .retry-btn:hover{border-color:var(--red);color:var(--red);}
+
+  footer{
+    text-align:center;margin-top:40px;color:var(--muted-2);
+    font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;
+  }
+</style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Left Column: Input Form -->
-    <div class="card">
-        <h2>💳 Transaction Details</h2>
-        <form id="riskForm">
-            <div class="form-group">
-                <label>Transaction Type</label>
-                <select id="txn_type">
-                    <option value="TRANSFER">TRANSFER</option>
-                    <option value="CASH_OUT">CASH_OUT</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Amount ($)</label>
-                <input type="number" id="amount" value="350000" step="0.01" required>
-            </div>
-            <div class="form-group">
-                <label>Origin Old Balance ($)</label>
-                <input type="number" id="old_balance_org" value="1200000" step="0.01" required>
-            </div>
-            <div class="form-group">
-                <label>Origin New Balance ($)</label>
-                <input type="number" id="new_balance_orig" value="850000" step="0.01" required>
-            </div>
-            <button type="submit" id="submitBtn">Analyze Risk</button>
-        </form>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z" stroke="#e21f36"/><path d="m9 12 2 2 4-4" stroke="#e21f36"/></svg>
     </div>
+    <div class="brand-text">
+      <div class="brand-name">CREDIT<span>-SCOUT</span></div>
+      <div class="brand-sub">AI Risk Engine</div>
+    </div>
+  </div>
+  <div class="status-pill"><span class="status-dot"></span>System Online</div>
+</header>
 
-    <!-- Right Column: Results -->
-    <div class="card">
-        <h2>🏦 Risk Assessment</h2>
-        <p>Submit a transaction to generate a real-time compliance report.</p>
-        
-        <div id="loading" style="display: none;">Analyzing risk patterns...</div>
-        
-        <div id="resultBox" class="result-box">
-            <h3 id="statusText" style="margin: 0;"></h3>
-            <div class="metric" id="riskScore"></div>
-            <p><strong>Math Discrepancy:</strong> $<span id="discrepancy"></span></p>
-            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 1.5rem 0;">
-            <h4>📝 Audit Report (Llama 3.1)</h4>
-            <div id="explanation"></div>
+<main class="page">
+  <div class="page-head">
+    <p class="eyebrow">Fraud Detection · Live Model</p>
+    <h1>Transaction Risk Assessment</h1>
+    <p class="page-desc">Enter transaction details to score fraud probability and generate an audit-ready compliance explanation.</p>
+  </div>
+
+  <div class="grid">
+    <!-- Input panel -->
+    <section class="panel">
+      <h2 class="panel-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        Transaction Details
+      </h2>
+      <p class="panel-hint">All fields required for scoring.</p>
+
+      <form id="riskForm">
+        <div class="segmented">
+          <input type="radio" name="txn_type" id="type-transfer" value="TRANSFER" checked>
+          <label for="type-transfer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10M7 7l3-3M7 7l3 3M17 17H7m10 0-3 3m3-3-3-3"/></svg>
+            Transfer
+          </label>
+          <input type="radio" name="txn_type" id="type-cashout" value="CASH_OUT">
+          <label for="type-cashout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
+            Cash Out
+          </label>
         </div>
-    </div>
-</div>
+
+        <div class="field">
+          <label for="amount">Amount</label>
+          <div class="field-input">
+            <span class="prefix">$</span>
+            <input type="number" id="amount" value="350000" step="0.01" min="0" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="old_balance_org">Origin Balance — Before</label>
+          <div class="field-input">
+            <span class="prefix">$</span>
+            <input type="number" id="old_balance_org" value="1200000" step="0.01" min="0" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="new_balance_orig">Origin Balance — After</label>
+          <div class="field-input">
+            <span class="prefix">$</span>
+            <input type="number" id="new_balance_orig" value="850000" step="0.01" min="0" required>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="spinner"></span>
+          <span class="btn-label">Analyze Transaction</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Result panel -->
+    <section class="panel result-panel">
+      <div class="steps">
+        <div class="step" id="step-1"></div>
+        <div class="step" id="step-2"></div>
+        <div class="step" id="step-3"></div>
+      </div>
+      <div class="steps-labels"><span>Details</span><span>Scan</span><span>Report</span></div>
+
+      <div class="state is-visible" id="state-empty">
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+          <p><span class="accent">Awaiting transaction data.</span><br>Fill in the form and run analysis to generate a risk report.</p>
+        </div>
+      </div>
+
+      <div class="state" id="state-loading">
+        <div class="loading-state">
+          <div class="scan-box"></div>
+          <div class="loading-text" id="loadingText">Scanning transaction pattern…</div>
+        </div>
+      </div>
+
+      <div class="state" id="state-error">
+        <div class="error-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a1.8 1.8 0 0 0 1.5 2.7h16.2a1.8 1.8 0 0 0 1.5-2.7L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/></svg>
+          <p id="errorText">Couldn't reach the risk engine. Check the connection and try again.</p>
+          <button class="retry-btn" id="retryBtn">Try again</button>
+        </div>
+      </div>
+
+      <div class="state" id="state-result">
+        <div class="verdict-row">
+          <span class="badge" id="verdictBadge"></span>
+          <span class="ref-id" id="refId"></span>
+        </div>
+
+        <div class="gauge-wrap">
+          <svg class="gauge" viewBox="0 0 260 150">
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#2fbf6e"/>
+                <stop offset="50%" stop-color="#e2b21f"/>
+                <stop offset="100%" stop-color="#e21f36"/>
+              </linearGradient>
+            </defs>
+            <path d="M20 130 A110 110 0 0 1 240 130" fill="none" stroke="#242427" stroke-width="16" stroke-linecap="round"/>
+            <path d="M20 130 A110 110 0 0 1 240 130" fill="none" stroke="url(#gaugeGrad)" stroke-width="16" stroke-linecap="round" opacity="0.9"/>
+            <g class="needle" id="needle">
+              <line x1="130" y1="130" x2="130" y2="42" stroke="#f2f2f0" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="130" cy="130" r="7" fill="#f2f2f0"/>
+            </g>
+          </svg>
+          <div class="gauge-value" id="gaugeValue">0%</div>
+          <div class="gauge-label">Fraud Probability</div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-label">Type</div>
+            <div class="stat-value" id="statType">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Amount</div>
+            <div class="stat-value" id="statAmount">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Discrepancy</div>
+            <div class="stat-value" id="statDiscrepancy">—</div>
+          </div>
+        </div>
+
+        <div class="report-box">
+          <div class="report-head">
+            <div class="report-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 2h8l4 4v16H4V2Z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+              Audit Report
+            </div>
+            <span class="model-tag">LLM Generated</span>
+          </div>
+          <div class="report-text" id="reportText"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>CREDIT-SCOUT AI &middot; Model outputs are advisory and require human compliance review</footer>
+</main>
 
 <script>
-    document.getElementById('riskForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const btn = document.getElementById('submitBtn');
-        const loading = document.getElementById('loading');
-        const resultBox = document.getElementById('resultBox');
-        
-        btn.disabled = true;
-        loading.style.display = 'block';
-        resultBox.style.display = 'none';
-        
-        const payload = {
-            txn_type: document.getElementById('txn_type').value,
-            amount: parseFloat(document.getElementById('amount').value),
-            old_balance_org: parseFloat(document.getElementById('old_balance_org').value),
-            new_balance_orig: parseFloat(document.getElementById('new_balance_orig').value)
-        };
+(function(){
+  const form = document.getElementById('riskForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const states = {
+    empty: document.getElementById('state-empty'),
+    loading: document.getElementById('state-loading'),
+    error: document.getElementById('state-error'),
+    result: document.getElementById('state-result'),
+  };
+  const steps = [document.getElementById('step-1'), document.getElementById('step-2'), document.getElementById('step-3')];
+  const loadingTexts = ['Scanning transaction pattern…','Weighing balance signals…','Compiling audit narrative…'];
 
-        try {
-            const response = await fetch('/analyze-risk', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                document.getElementById('statusText').innerText = data.status === 'FLAGGED' ? '⛔ FLAGGED' : '✅ APPROVED';
-                document.getElementById('riskScore').innerText = (data.risk_score * 100).toFixed(2) + '% Probability';
-                document.getElementById('discrepancy').innerText = data.math_discrepancy.toFixed(2);
-                document.getElementById('explanation').innerText = data.llm_explanation;
-                
-                resultBox.className = 'result-box ' + (data.status === 'FLAGGED' ? 'flagged' : 'approved');
-                resultBox.style.display = 'block';
-            } else {
-                alert('Error: ' + data.detail);
-            }
-        } catch (error) {
-            alert('Failed to connect to the API.');
-        } finally {
-            btn.disabled = false;
-            loading.style.display = 'none';
-        }
+  function showState(name){
+    Object.values(states).forEach(el => el.classList.remove('is-visible'));
+    states[name].classList.add('is-visible');
+  }
+
+  function setSteps(activeIndex, doneUpTo){
+    steps.forEach((el, i) => {
+      el.classList.toggle('is-done', i < doneUpTo);
+      el.classList.toggle('is-active', i === activeIndex);
     });
+  }
+
+  function fmtMoney(n){
+    const num = Number(n);
+    return '$' + num.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+
+  function refId(){
+    const rand = Math.floor(Math.random()*900000+100000);
+    return 'TXN-' + rand + ' · ' + new Date().toLocaleString();
+  }
+
+  let loadingTimer;
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    const payload = {
+      txn_type: document.querySelector('input[name="txn_type"]:checked').value,
+      amount: parseFloat(document.getElementById('amount').value),
+      old_balance_org: parseFloat(document.getElementById('old_balance_org').value),
+      new_balance_orig: parseFloat(document.getElementById('new_balance_orig').value),
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.classList.add('is-loading');
+    showState('loading');
+    setSteps(1, 1);
+
+    let ti = 0;
+    document.getElementById('loadingText').textContent = loadingTexts[0];
+    loadingTimer = setInterval(() => {
+      ti = (ti + 1) % loadingTexts.length;
+      document.getElementById('loadingText').textContent = loadingTexts[ti];
+    }, 1100);
+
+    try{
+      const res = await fetch('/analyze-risk', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if(!res.ok){ throw new Error(data.detail || 'Request failed'); }
+
+      clearInterval(loadingTimer);
+      setSteps(2, 3);
+      renderResult(data, payload);
+      showState('result');
+    }catch(err){
+      clearInterval(loadingTimer);
+      document.getElementById('errorText').textContent = err.message && err.message !== 'Failed to fetch'
+        ? err.message
+        : "Couldn't reach the risk engine. Check the connection and try again.";
+      showState('error');
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('is-loading');
+    }
+  });
+
+  document.getElementById('retryBtn').addEventListener('click', function(){
+    showState('empty');
+    setSteps(-1, 0);
+  });
+
+  function renderResult(data, payload){
+    const flagged = data.status === 'FLAGGED';
+    const badge = document.getElementById('verdictBadge');
+    badge.className = 'badge ' + (flagged ? 'flagged' : 'approved');
+    badge.innerHTML = flagged
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a1.8 1.8 0 0 0 1.5 2.7h16.2a1.8 1.8 0 0 0 1.5-2.7L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/></svg> Flagged'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Approved';
+
+    document.getElementById('refId').textContent = refId();
+
+    const pct = Math.max(0, Math.min(1, data.risk_score));
+    document.getElementById('gaugeValue').textContent = (pct*100).toFixed(1) + '%';
+    document.getElementById('gaugeValue').style.color = flagged ? 'var(--red)' : 'var(--green)';
+    const angle = -90 + pct*180;
+    document.getElementById('needle').style.transform = 'rotate(' + angle + 'deg)';
+
+    document.getElementById('statType').textContent = payload.txn_type;
+    document.getElementById('statAmount').textContent = fmtMoney(payload.amount);
+    const discEl = document.getElementById('statDiscrepancy');
+    discEl.textContent = fmtMoney(data.math_discrepancy);
+    discEl.classList.toggle('is-flag', Math.abs(data.math_discrepancy) > 0.01);
+
+    document.getElementById('reportText').textContent = data.llm_explanation;
+  }
+})();
 </script>
 
 </body>
