@@ -29,7 +29,7 @@
     --font-body:'Inter',sans-serif;
     --font-mono:'IBM Plex Mono',monospace;
   }
-
+ 
   *{box-sizing:border-box;}
   html{-webkit-text-size-adjust:100%;}
   body{
@@ -41,17 +41,17 @@
     -webkit-font-smoothing:antialiased;
     min-height:100vh;
   }
-
+ 
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
   }
-
+ 
   ::selection{background:var(--red);color:var(--white);}
-
+ 
   a{color:inherit;}
-
+ 
   button{font-family:inherit;}
-
+ 
   /* ---------- Header ---------- */
   .topbar{
     position:sticky;top:0;z-index:20;
@@ -99,7 +99,7 @@
     70%{box-shadow:0 0 0 6px rgba(47,191,110,0);}
     100%{box-shadow:0 0 0 0 rgba(47,191,110,0);}
   }
-
+ 
   /* ---------- Layout ---------- */
   .page{
     max-width:1180px;margin:0 auto;
@@ -115,7 +115,7 @@
     font-size:clamp(22px,3.4vw,32px);margin:0 0 8px;letter-spacing:-.01em;
   }
   .page-desc{color:var(--muted);margin:0;font-size:14.5px;max-width:56ch;}
-
+ 
   .grid{
     display:grid;
     grid-template-columns:minmax(280px,380px) 1fr;
@@ -125,7 +125,7 @@
   @media (max-width:860px){
     .grid{grid-template-columns:1fr;}
   }
-
+ 
   .panel{
     background:var(--surface);
     border:1px solid var(--border);
@@ -138,7 +138,7 @@
   }
   .panel-title svg{width:16px;height:16px;color:var(--red);flex-shrink:0;}
   .panel-hint{color:var(--muted-2);font-size:12.5px;margin:0 0 20px;}
-
+ 
   /* ---------- Form ---------- */
   .segmented{
     display:grid;grid-template-columns:1fr 1fr;
@@ -157,7 +157,7 @@
     background:var(--red-soft);border-color:var(--red);color:var(--white);
   }
   .segmented input:focus-visible + label{outline:2px solid var(--red);outline-offset:2px;}
-
+ 
   .field{margin-bottom:16px;}
   .field label{
     display:block;font-size:12px;font-weight:500;color:var(--muted);
@@ -183,7 +183,7 @@
   }
   .field input::-webkit-outer-spin-button,
   .field input::-webkit-inner-spin-button{opacity:.5;}
-
+ 
   .submit-btn{
     width:100%;padding:14px;margin-top:6px;
     background:var(--red);color:var(--white);border:none;
@@ -205,7 +205,7 @@
   .submit-btn.is-loading .btn-label{font-size:0;}
   .submit-btn.is-loading .btn-label::after{font-size:14px;}
   @keyframes spin{to{transform:rotate(360deg);}}
-
+ 
   /* ---------- Steps ---------- */
   .steps{
     display:flex;align-items:center;gap:6px;margin-bottom:22px;
@@ -221,13 +221,13 @@
     font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;
     color:var(--muted-2);text-transform:uppercase;margin:-16px 0 22px;
   }
-
+ 
   /* ---------- Result states ---------- */
   .result-panel{min-height:480px;display:flex;flex-direction:column;}
-
+ 
   .state{display:none;flex:1;flex-direction:column;}
   .state.is-visible{display:flex;}
-
+ 
   .empty-state{
     flex:1;display:flex;flex-direction:column;align-items:center;
     justify-content:center;text-align:center;gap:14px;
@@ -237,7 +237,7 @@
   .empty-state svg{width:34px;height:34px;color:var(--border-strong);}
   .empty-state p{margin:0;font-size:13px;max-width:32ch;}
   .empty-state .accent{color:var(--muted);font-weight:500;}
-
+ 
   .loading-state{
     flex:1;display:flex;flex-direction:column;align-items:center;
     justify-content:center;gap:22px;padding:40px 20px;
@@ -259,7 +259,7 @@
     font-family:var(--font-mono);font-size:12px;color:var(--muted);
     letter-spacing:.02em;
   }
-
+ 
   /* ---------- Verdict + gauge ---------- */
   .verdict-row{
     display:flex;align-items:center;justify-content:space-between;
@@ -277,7 +277,7 @@
     font-family:var(--font-mono);font-size:11.5px;color:var(--muted-2);
     text-align:right;
   }
-
+ 
   .gauge-wrap{
     display:flex;flex-direction:column;align-items:center;
     padding:6px 0 4px;
@@ -295,7 +295,7 @@
     transform-origin:130px 130px;
     transition:transform 1s cubic-bezier(.2,.8,.2,1);
   }
-
+ 
   .stat-row{
     display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
     gap:10px;margin:22px 0;
@@ -313,7 +313,7 @@
     word-break:break-word;
   }
   .stat-value.is-flag{color:var(--red);}
-
+ 
   .report-box{
     border-top:1px solid var(--border);padding-top:18px;margin-top:4px;
   }
@@ -336,7 +336,7 @@
     font-family:var(--font-mono);font-size:12.5px;line-height:1.7;
     color:#d7d7d9;white-space:pre-wrap;
   }
-
+ 
   .error-state{
     flex:1;display:flex;flex-direction:column;align-items:center;
     justify-content:center;text-align:center;gap:12px;padding:40px 20px;
@@ -349,7 +349,7 @@
     font-size:12.5px;cursor:pointer;
   }
   .retry-btn:hover{border-color:var(--red);color:var(--red);}
-
+ 
   footer{
     text-align:center;margin-top:40px;color:var(--muted-2);
     font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;
@@ -357,7 +357,7 @@
 </style>
 </head>
 <body>
-
+ 
 <header class="topbar">
   <div class="brand">
     <div class="brand-mark">
@@ -370,14 +370,14 @@
   </div>
   <div class="status-pill"><span class="status-dot"></span>System Online</div>
 </header>
-
+ 
 <main class="page">
   <div class="page-head">
     <p class="eyebrow">Fraud Detection · Live Model</p>
     <h1>Transaction Risk Assessment</h1>
     <p class="page-desc">Enter transaction details to score fraud probability and generate an audit-ready compliance explanation.</p>
   </div>
-
+ 
   <div class="grid">
     <!-- Input panel -->
     <section class="panel">
@@ -386,7 +386,7 @@
         Transaction Details
       </h2>
       <p class="panel-hint">All fields required for scoring.</p>
-
+ 
       <form id="riskForm">
         <div class="segmented">
           <input type="radio" name="txn_type" id="type-transfer" value="TRANSFER" checked>
@@ -400,7 +400,7 @@
             Cash Out
           </label>
         </div>
-
+ 
         <div class="field">
           <label for="amount">Amount</label>
           <div class="field-input">
@@ -408,7 +408,7 @@
             <input type="number" id="amount" value="350000" step="0.01" min="0" required>
           </div>
         </div>
-
+ 
         <div class="field">
           <label for="old_balance_org">Origin Balance — Before</label>
           <div class="field-input">
@@ -416,7 +416,7 @@
             <input type="number" id="old_balance_org" value="1200000" step="0.01" min="0" required>
           </div>
         </div>
-
+ 
         <div class="field">
           <label for="new_balance_orig">Origin Balance — After</label>
           <div class="field-input">
@@ -424,14 +424,14 @@
             <input type="number" id="new_balance_orig" value="850000" step="0.01" min="0" required>
           </div>
         </div>
-
+ 
         <button type="submit" class="submit-btn" id="submitBtn">
           <span class="spinner"></span>
           <span class="btn-label">Analyze Transaction</span>
         </button>
       </form>
     </section>
-
+ 
     <!-- Result panel -->
     <section class="panel result-panel">
       <div class="steps">
@@ -440,21 +440,21 @@
         <div class="step" id="step-3"></div>
       </div>
       <div class="steps-labels"><span>Details</span><span>Scan</span><span>Report</span></div>
-
+ 
       <div class="state is-visible" id="state-empty">
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
           <p><span class="accent">Awaiting transaction data.</span><br>Fill in the form and run analysis to generate a risk report.</p>
         </div>
       </div>
-
+ 
       <div class="state" id="state-loading">
         <div class="loading-state">
           <div class="scan-box"></div>
           <div class="loading-text" id="loadingText">Scanning transaction pattern…</div>
         </div>
       </div>
-
+ 
       <div class="state" id="state-error">
         <div class="error-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a1.8 1.8 0 0 0 1.5 2.7h16.2a1.8 1.8 0 0 0 1.5-2.7L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/></svg>
@@ -462,13 +462,13 @@
           <button class="retry-btn" id="retryBtn">Try again</button>
         </div>
       </div>
-
+ 
       <div class="state" id="state-result">
         <div class="verdict-row">
           <span class="badge" id="verdictBadge"></span>
           <span class="ref-id" id="refId"></span>
         </div>
-
+ 
         <div class="gauge-wrap">
           <svg class="gauge" viewBox="0 0 260 150">
             <defs>
@@ -488,7 +488,7 @@
           <div class="gauge-value" id="gaugeValue">0%</div>
           <div class="gauge-label">Fraud Probability</div>
         </div>
-
+ 
         <div class="stat-row">
           <div class="stat-card">
             <div class="stat-label">Type</div>
@@ -503,7 +503,7 @@
             <div class="stat-value" id="statDiscrepancy">—</div>
           </div>
         </div>
-
+ 
         <div class="report-box">
           <div class="report-head">
             <div class="report-title">
@@ -517,10 +517,10 @@
       </div>
     </section>
   </div>
-
+ 
   <footer>CREDIT-SCOUT AI &middot; Model outputs are advisory and require human compliance review</footer>
 </main>
-
+ 
 <script>
 (function(){
   const form = document.getElementById('riskForm');
@@ -533,53 +533,53 @@
   };
   const steps = [document.getElementById('step-1'), document.getElementById('step-2'), document.getElementById('step-3')];
   const loadingTexts = ['Scanning transaction pattern…','Weighing balance signals…','Compiling audit narrative…'];
-
+ 
   function showState(name){
     Object.values(states).forEach(el => el.classList.remove('is-visible'));
     states[name].classList.add('is-visible');
   }
-
+ 
   function setSteps(activeIndex, doneUpTo){
     steps.forEach((el, i) => {
       el.classList.toggle('is-done', i < doneUpTo);
       el.classList.toggle('is-active', i === activeIndex);
     });
   }
-
+ 
   function fmtMoney(n){
     const num = Number(n);
     return '$' + num.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
   }
-
+ 
   function refId(){
     const rand = Math.floor(Math.random()*900000+100000);
     return 'TXN-' + rand + ' · ' + new Date().toLocaleString();
   }
-
+ 
   let loadingTimer;
-
+ 
   form.addEventListener('submit', async function(e){
     e.preventDefault();
-
+ 
     const payload = {
       txn_type: document.querySelector('input[name="txn_type"]:checked').value,
       amount: parseFloat(document.getElementById('amount').value),
       old_balance_org: parseFloat(document.getElementById('old_balance_org').value),
       new_balance_orig: parseFloat(document.getElementById('new_balance_orig').value),
     };
-
+ 
     submitBtn.disabled = true;
     submitBtn.classList.add('is-loading');
     showState('loading');
     setSteps(1, 1);
-
+ 
     let ti = 0;
     document.getElementById('loadingText').textContent = loadingTexts[0];
     loadingTimer = setInterval(() => {
       ti = (ti + 1) % loadingTexts.length;
       document.getElementById('loadingText').textContent = loadingTexts[ti];
     }, 1100);
-
+ 
     try{
       const res = await fetch('/analyze-risk', {
         method: 'POST',
@@ -588,7 +588,7 @@
       });
       const data = await res.json();
       if(!res.ok){ throw new Error(data.detail || 'Request failed'); }
-
+ 
       clearInterval(loadingTimer);
       setSteps(2, 3);
       renderResult(data, payload);
@@ -604,12 +604,12 @@
       submitBtn.classList.remove('is-loading');
     }
   });
-
+ 
   document.getElementById('retryBtn').addEventListener('click', function(){
     showState('empty');
     setSteps(-1, 0);
   });
-
+ 
   function renderResult(data, payload){
     const flagged = data.status === 'FLAGGED';
     const badge = document.getElementById('verdictBadge');
@@ -617,25 +617,25 @@
     badge.innerHTML = flagged
       ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a1.8 1.8 0 0 0 1.5 2.7h16.2a1.8 1.8 0 0 0 1.5-2.7L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/></svg> Flagged'
       : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Approved';
-
+ 
     document.getElementById('refId').textContent = refId();
-
+ 
     const pct = Math.max(0, Math.min(1, data.risk_score));
     document.getElementById('gaugeValue').textContent = (pct*100).toFixed(1) + '%';
     document.getElementById('gaugeValue').style.color = flagged ? 'var(--red)' : 'var(--green)';
     const angle = -90 + pct*180;
     document.getElementById('needle').style.transform = 'rotate(' + angle + 'deg)';
-
+ 
     document.getElementById('statType').textContent = payload.txn_type;
     document.getElementById('statAmount').textContent = fmtMoney(payload.amount);
     const discEl = document.getElementById('statDiscrepancy');
     discEl.textContent = fmtMoney(data.math_discrepancy);
     discEl.classList.toggle('is-flag', Math.abs(data.math_discrepancy) > 0.01);
-
+ 
     document.getElementById('reportText').textContent = data.llm_explanation;
   }
 })();
 </script>
-
+ 
 </body>
 </html>
