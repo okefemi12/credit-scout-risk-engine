@@ -108,7 +108,7 @@ def generate_llm_report(shap_values, raw_features):
     
     try:
         return client.chat.completions.create(
-            model="llama-3.3-70b-versatile", messages=[{"role": "user", "content": prompt}], temperature=0.1, max_tokens=300
+            model="llama-3.1-8b-instant", messages=[{"role": "user", "content": prompt}], temperature=0.1, max_tokens=300
         ).choices[0].message.content
     except Exception as e:
         return f"LLM Error: {str(e)}"
