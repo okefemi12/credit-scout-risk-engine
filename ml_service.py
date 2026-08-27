@@ -4,7 +4,7 @@ import tensorflow as tf
 import shap
 import pickle
 from groq import Groq
-
+import re
 # Initialize global resources
 model, scaler, columns, explainer = None, None, None, None
 groq_api_key = os.environ.get("GROQ_API_KEY")
