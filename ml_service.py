@@ -82,6 +82,7 @@ def process_transaction(req):
     return risk_prob, report, error_bal_orig
 
 
+
 def generate_llm_report(shap_values, raw_features):
     if not client: 
         return "Error: Groq API Key missing."
