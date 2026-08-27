@@ -3,7 +3,8 @@ uvicorn
 pydantic
 sqlalchemy
 psycopg2-binary
-tensorflow-cpu>=2.16.0
+tensorflow-cpu==2.17.0
+keras==3.4.1
 shap
 numpy
 pandas
