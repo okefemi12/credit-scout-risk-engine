@@ -10,7 +10,7 @@ model, scaler, columns, explainer = None, None, None, None
 groq_api_key = os.environ.get("GROQ_API_KEY")
 client = Groq(api_key=groq_api_key) if groq_api_key else None
 
-BUSSINESS_MAP = {
+BUSINESS_MAP = {
     'step': 'Transaction Hour', 'type_enc': 'Txn Type (Transfer/CashOut)',
     'amount': 'Transaction Amount', 'oldbalanceOrg': 'Origin Acct Balance (Pre)',
     'newbalanceOrig': 'Origin Acct Balance (Post)', 'oldbalanceDest': 'Recipient Acct Balance (Pre)',
