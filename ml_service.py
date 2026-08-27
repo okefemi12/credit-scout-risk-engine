@@ -97,18 +97,18 @@ def generate_llm_report(shap_values, raw_features):
     data_lines, shap_lines = [], []
     
     for name, real_val, shap_val in feature_data[:3]:
-        val_str = f"${real_val:,.2f}" if "Amount" in name or "Balance" in name or "Discrepancy" in name else f"{real_val:.2f}"
+        val_str = f"${real_val:,.2f}" if "Amount" in name or "Balance" in name else f"{real_val:.2f}"
         hint = "ANOMALY (Increased Risk)" if shap_val > 0 else "CONSISTENT BEHAVIOR (Mitigated Risk)"
         data_lines.append(f"- {name}: {val_str}")
         shap_lines.append(f"- {name}: {hint} | Contribution: {(abs(shap_val)/total_mass)*100:.1f}%")
 
-    prompt = f"""You are a Senior Model Risk Examiner. Write a strict, short compliance explanation.
+    prompt = f"""You are a Senior Model Risk Examiner. Write a short compliance explanation.
     CONTEXT:\n{chr(10).join(data_lines)}\nRISK FACTORS:\n{chr(10).join(shap_lines)}
-    Write a "Notice of Adverse Action" explanation. Use the provided logic hints. Interpret negative SHAP as consistency. Keep under 150 words. Professional tone only."""
+    Write a "Notice of Adverse Action" explanation. Use logic hints. Keep under 150 words."""
     
     try:
         return client.chat.completions.create(
-            model="openai/gpt-oss-20b", 
+            model="llama-3.1-8b-instant",  # Active free-tier Groq model
             messages=[{"role": "user", "content": prompt}], 
             temperature=0.1, 
             max_tokens=300
