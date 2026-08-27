@@ -64,13 +64,23 @@ streamlit run app.py
 
 ## 📂 Project Structure
 
-* `app.py`: Main application logic.
-* `models/`: Serialized model artifacts (Scaler, LSTM, SHAP Explainers).
-* `notebooks/`: Model training and evaluation notebooks.
+* `ml_service.py`: Core machine learning inference, feature scaling, SHAP computation, and Groq LLM reporting.
+
+* `models.py`: SQLAlchemy database models for transaction audit logging.
+
+* `schemas.py`: Pydantic request and response validation models.
+
+* `database.py`: PostgreSQL database engine configuration.
+
+* `static/`: Production HTML/CSS frontend dashboard interface.
+
+* `latest_checkpoint.h5`: Serialized LSTM model weights.
+
+* `scaler.pkl & columns.pkl`: Feature preprocessing and scaling artifacts.
 
 ---
 
-*Created by [oke39] - 2026*
+*Created by Oke Oluwanifemi - 2026*
 
 ```
 
