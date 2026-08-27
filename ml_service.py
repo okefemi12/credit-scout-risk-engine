@@ -103,21 +103,22 @@ def generate_llm_report(shap_values, raw_features):
         data_lines.append(f"- {name}: {val_str}")
         shap_lines.append(f"- {name}: {hint} | Contribution: {(abs(shap_val)/total_mass)*100:.1f}%")
 
-    prompt = f"""You are a Senior Model Risk Examiner. Write a short compliance explanation.
+    prompt = f"""You are a Senior Model Risk Examiner. Write a strict, short compliance explanation.
 CONTEXT:
 {chr(10).join(data_lines)}
 
 RISK FACTORS:
 {chr(10).join(shap_lines)}
 
-Write a "Notice of Adverse Action" explanation. Use logic hints. Keep under 150 words."""
-    
+Write a "Notice of Adverse Action" explanation. Use the provided logic hints. Interpret negative SHAP as consistency. Keep under 150 words. Professional tone only.
+IMPORTANT: Return ONLY the final notice text. Do NOT include thought processes, draft steps, reasoning tags, or preamble."""
+
     try:
         completion = client.chat.completions.create(
             model="qwen/qwen3.6-27b",
             messages=[{"role": "user", "content": prompt}], 
             temperature=0.1, 
-            max_tokens=300
+            max_tokens=500 
         )
         return completion.choices[0].message.content or "No response returned from model."
     except Exception as e:
