@@ -110,17 +110,21 @@ CONTEXT:
 RISK FACTORS:
 {chr(10).join(shap_lines)}
 
-Write a "Notice of Adverse Action" explanation. Use the provided logic hints. Interpret negative SHAP as consistency. Keep under 150 words. Professional tone only.
-IMPORTANT: Return ONLY the final notice text. Do NOT include thought processes, draft steps, reasoning tags, or preamble."""
+Write a "Notice of Adverse Action" explanation. Use the provided logic hints. Interpret negative SHAP as consistency. Keep under 150 words. Professional tone only."""
 
     try:
         completion = client.chat.completions.create(
             model="qwen/qwen3.6-27b",
             messages=[{"role": "user", "content": prompt}], 
             temperature=0.1, 
-            max_tokens=500 
+            max_tokens=1000
         )
-        return completion.choices[0].message.content or "No response returned from model."
+        content = completion.choices[0].message.content or ""
+        
+        # Remove any <think>...</think> block emitted by reasoning models
+        cleaned_content = re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL).strip()
+        
+        return cleaned_content if cleaned_content else content
     except Exception as e:
         return f"LLM Error: {str(e)}"
     
