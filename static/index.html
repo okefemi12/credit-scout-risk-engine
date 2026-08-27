@@ -631,6 +631,11 @@
     const discEl = document.getElementById('statDiscrepancy');
     discEl.textContent = fmtMoney(data.math_discrepancy);
     discEl.classList.toggle('is-flag', Math.abs(data.math_discrepancy) > 0.01);
+    let formattedReport = data.llm_explanation
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Convert **bold**
+      .replace(/\*(.*?)\*/g, "<em>$1</em>");            // Convert *italics*
  
     document.getElementById('reportText').textContent = data.llm_explanation;
   }
